@@ -81,13 +81,6 @@ public class Main
         // create neural network
         NeuralNetwork mnistNetwork = new NeuralNetwork(784, 1, 15, 10);
 
-        // run network through training data
-        for (NetworkInput inputData : trainingData)
-        {
-            // input data
-            mnistNetwork.InputNetworkData(inputData);
 
-            // TODO: Set up training methods for neural network
-        }
     }
 }

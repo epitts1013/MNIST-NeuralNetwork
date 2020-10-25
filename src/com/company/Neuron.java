@@ -3,11 +3,13 @@ import java.lang.Math;
 
 public class Neuron
 {
-    // sets whether neuron is an input neuron, if neuron is an input neuron its output can be set manually
+    // sets whether neuron is an input neuron, if neuron is an input neuron its output
+    // can be set manually but its output cannot be calculated based on inputs, and
+    // in fact does not have any inputs or bias
     final boolean INPUT_NEURON;
 
     // class variables
-    private double bias, output;
+    private double bias, activation;
     private double[] weights;
     private final Neuron[] inputs;
 
@@ -40,10 +42,8 @@ public class Neuron
     }
 
     // Calculates output of neuron
-    // If neuron is initialized as an input neuron, just returns output
-    // Yes, there's already a GetOutput(), I need it for other methods, I don't want errors if
-    // somebody tries to use this method on an input neuron
-    public double CalculateOutput()
+    // If neuron is initialized as an input neuron, does nothing
+    public void CalculateActivation()
     {
         // if not in input neuron, proceed as normal
         if (!INPUT_NEURON)
@@ -53,30 +53,29 @@ public class Neuron
 
             // perform dot-product
             for (int i = 0; i < weights.length; i++)
-                sum += inputs[i].GetOutput() * weights[i];
+                sum += inputs[i].GetActivation() * weights[i];
 
             // add bias to sum
             sum += bias;
 
             // use sum as input for sigmoid function
-            output = 1 / (1 + Math.pow(Math.E, -sum));
+            activation = 1 / (1 + Math.pow(Math.E, -sum));
         }
-
-        // return output
-        return output;
+        else
+            System.out.println("Activation cannot be calculated for input neuron");
     }
 
     // getter for output
-    public double GetOutput()
+    public double GetActivation()
     {
-        return output;
+        return activation;
     }
 
     // setter for output, does not work if INPUT_NEURON is not true
-    public void SetOutput(double value)
+    public void SetActivation(double value)
     {
         if (INPUT_NEURON)
-            output = value;
+            activation = value;
         else
             System.out.println("Value for neuron cannot be manually set if it is not initialized as an input neuron");
     }
