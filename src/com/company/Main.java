@@ -19,6 +19,9 @@ public class Main
         NetworkInput[] trainingData = new NetworkInput[TRAINING_DATA_SIZE];
         NetworkInput[] testingData = new NetworkInput[TESTING_DATA_SIZE];
 
+        // create neural network
+        NeuralNetwork mnistNetwork = new NeuralNetwork(784, 1, 15, 10);
+
         // get input data file paths from command line arguments
         if (USE_CMD_ARGS)
         {
@@ -78,9 +81,15 @@ public class Main
             System.out.println("An error occurred while reading the training data file");
         }
 
-        // create neural network
-        NeuralNetwork mnistNetwork = new NeuralNetwork(784, 1, 15, 10);
+        // run network training
+        mnistNetwork.TrainNetwork(trainingData);
+        // test network on training data
+        boolean[] correctOutputs = mnistNetwork.TestNetwork(trainingData);
 
-
+        // calculate % of training data answered successfully
+        int numCorrect = 0;
+        for (boolean output : correctOutputs)
+            if (output) numCorrect++;
+        System.out.println("Network answered " + ((numCorrect / correctOutputs.length) * 100) + "% of training cases correctly.");
     }
 }
