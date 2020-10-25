@@ -1,11 +1,10 @@
 package com.company;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main
 {
-    // boolean determines whether filepaths are gotten from command line or hardcoded into program
+    // boolean determines whether file paths are gotten from command line or hardcoded into program
     static final boolean USE_CMD_ARGS = true;
 
     // hardcoded values for training and testing dataset size
@@ -20,13 +19,13 @@ public class Main
         NetworkInput[] trainingData = new NetworkInput[TRAINING_DATA_SIZE];
         NetworkInput[] testingData = new NetworkInput[TESTING_DATA_SIZE];
 
-        // get input data filepaths from command line arguments
+        // get input data file paths from command line arguments
         if (USE_CMD_ARGS)
         {
             trainingDataFilePath = args[0];
             testingDataFilePath = args[1];
         }
-        else  // get input data filepaths from hard-coded filepaths
+        else  // get input data file paths from hard-coded file paths
         {
             trainingDataFilePath = "{some path}/mnist_train.csv";
             testingDataFilePath = "{some path}/mnist_test.csv";
@@ -74,9 +73,9 @@ public class Main
         {
             System.out.println("The specified file could not be found: \"" + trainingDataFilePath + "\"");
         }
-        catch (IOException e)  // an error occured during file reading
+        catch (IOException e)  // an error occurred during file reading
         {
-            System.out.println("An error occured while reading the training data file");
+            System.out.println("An error occurred while reading the training data file");
         }
 
         // create neural network
