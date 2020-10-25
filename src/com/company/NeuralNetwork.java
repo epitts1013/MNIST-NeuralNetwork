@@ -3,9 +3,9 @@ package com.company;
 public class NeuralNetwork
 {
     // neuron arrays
-    private Neuron[] inputLayer;
-    private Neuron[][] midLayers;
-    private Neuron[] outputLayer;
+    private final Neuron[] inputLayer;
+    private final Neuron[][] midLayers;
+    private final Neuron[] outputLayer;
 
     public NeuralNetwork(int numInputs, int numMidLayers, int numMidLayerNodes, int numOutputLayerNodes)
     {
@@ -39,4 +39,6 @@ public class NeuralNetwork
         for (int i = 0; i < inputLayer.length; i++)
             inputLayer[i].SetOutput(input.inputValues[i]);
     }
+
+
 }

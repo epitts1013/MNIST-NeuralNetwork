@@ -41,18 +41,34 @@ public class Main
 
         try
         {
-            // attempt to initialize BufferedReader
+            // attempt to initialize BufferedReader for training data
             bufferedReader = new BufferedReader(new FileReader(trainingDataFile));
 
-            // read data from file
+            // variables for storing line information
             String line;
             String[] splitLine;
+
+            // read data from training data file
             for (int i = 0; (line = bufferedReader.readLine()) != null; i++)
             {
                 // separate each line into input data and correct output
                 splitLine = line.split(",");
                 trainingData[i] = new NetworkInput(Integer.parseInt(splitLine[0]), Arrays.copyOfRange(splitLine, 1, splitLine.length));
             }
+
+            // attempt to initialize BufferedReader for testing data
+            bufferedReader = new BufferedReader(new FileReader(testingDataFile));
+
+            // read data from testing data file
+            for (int i = 0; (line = bufferedReader.readLine()) != null; i++)
+            {
+                // separate each line into input data and correct output
+                splitLine = line.split(",");
+                testingData[i] = new NetworkInput(Integer.parseInt(splitLine[0]), Arrays.copyOfRange(splitLine, 1, splitLine.length));
+            }
+
+            // close buffered reader
+            bufferedReader.close();
         }
         catch (FileNotFoundException e)  // the file path given by trainingDataFilePath was invalid
         {
@@ -63,8 +79,16 @@ public class Main
             System.out.println("An error occured while reading the training data file");
         }
 
+        // create neural network
+        NeuralNetwork mnistNetwork = new NeuralNetwork(784, 1, 15, 10);
 
-        //TODO: Format file input
-        //TODO: Create classes
+        // run network through training data
+        for (NetworkInput inputData : trainingData)
+        {
+            // input data
+            mnistNetwork.InputNetworkData(inputData);
+
+            // TODO: Set up training methods for neural network
+        }
     }
 }
