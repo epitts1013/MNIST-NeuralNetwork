@@ -106,6 +106,39 @@ public class NeuralNetwork
             neuron.SetWeightGradient(weightGradient);
         }
 
+        // compute bias and weight gradients for each layer moving backwards
+        for (int i = midLayers.length - 1; i >= 0; i--)
+        {
+            // compute bias gradient for current layer
+            for (int j = 0; j < midLayers[i].length; j++)
+            {
+                if (i + 1 == midLayers.length)  // if on final hidden layer
+                {
+                    // calculate Sum(Weight[jk] * BiasGradient[j])
+                    double sumOfBiasScaledWeights = 0;
+                    for (Neuron neuron : outputLayer)
+                        sumOfBiasScaledWeights += neuron.GetWeights()[j] * neuron.GetBiasGradient();
+
+                    // calculate and set biasGradient
+                    double biasGradient = sumOfBiasScaledWeights * midLayers[i][j].GetActivation() * (1 - midLayers[i][j].GetActivation());
+                    midLayers[i][j].SetBiasGradient(biasGradient);
+                }
+                else  // for all other hidden layers
+                {
+                    // calculate Sum(Weight[jk] * BiasGradient[j])
+                    double sumOfBiasScaledWeights = 0;
+                    for (Neuron neuron : midLayers[i + 1])
+                        sumOfBiasScaledWeights += neuron.GetWeights()[j] * neuron.GetBiasGradient();
+
+                    // calculate and set biasGradient
+                    double biasGradient = sumOfBiasScaledWeights * midLayers[i][j].GetActivation() * (1 - midLayers[i][j].GetActivation());
+                    midLayers[i][j].SetBiasGradient(biasGradient);
+                }
+            }
+
+            // compute weight gradients for current layer
+
+        }
     }
 
     // runs through test data set and gives back array of correctly answered inputs
