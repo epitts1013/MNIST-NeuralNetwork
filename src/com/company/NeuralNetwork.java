@@ -46,11 +46,14 @@ public class NeuralNetwork
         // loop through set number of epochs
         for (int i = 0; i < numEpochs; i++)
         {
-            // shuffle training data
-            Collections.shuffle(Arrays.asList(trainingData));
+            if (!Main.DEBUG)
+            {
+                // shuffle training data
+                Collections.shuffle(Arrays.asList(trainingData));
+            }
 
             // array stores a mini-batch during use
-            NetworkInput[] miniBatch = new NetworkInput[10];
+            NetworkInput[] miniBatch = new NetworkInput[batchSize];
             
             // loop through mini-batches
             for (int j = 0; j < trainingData.length; j += batchSize)

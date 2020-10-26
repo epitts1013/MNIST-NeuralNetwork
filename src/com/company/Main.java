@@ -11,7 +11,7 @@ public class Main
     static final int TRAINING_DATA_SIZE = 60000, TESTING_DATA_SIZE = 10000;
 
     // boolean activates debug statements
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
 
     public static void main(String[] args)
     {
@@ -84,21 +84,32 @@ public class Main
             System.out.println("An error occurred while reading the training data file");
         }
 
-        System.out.println("Beginning training");
-        // run network training
-        mnistNetwork.TrainNetwork(trainingData, 3.0, 10, 30);
+        if (!DEBUG)
+        {
+            System.out.println("Beginning training");
+            // run network training
+            mnistNetwork.TrainNetwork(trainingData, 3.0, 10, 30);
+
+            // test network on training data
+            boolean[] correctOutputs = mnistNetwork.TestNetwork(trainingData);
+
+            // calculate % of training data answered successfully
+            int numCorrect = 0;
+            for (boolean output : correctOutputs)
+                if (output) numCorrect++;
+            System.out.println("Network answered " + (((double)numCorrect / (double)correctOutputs.length) * 100) + "% of training cases correctly.");
+        }
 
         // DEBUG
         if (DEBUG)
-            mnistNetwork.RunNetwork(trainingData[1].inputValues);
-
-        // test network on training data
-        boolean[] correctOutputs = mnistNetwork.TestNetwork(trainingData);
-
-        // calculate % of training data answered successfully
-        int numCorrect = 0;
-        for (boolean output : correctOutputs)
-            if (output) numCorrect++;
-        System.out.println("Network answered " + (((double)numCorrect / (double)correctOutputs.length) * 100) + "% of training cases correctly.");
+        {
+            NeuralNetwork testNetwork = new NeuralNetwork(4, 1, 3, 2);
+            NetworkInput[] testInputs = new NetworkInput[4];
+            testInputs[0] = new NetworkInput(1, "0,1,0,1".split(","));
+            testInputs[1] = new NetworkInput(0, "1,0,1,0".split(","));
+            testInputs[2] = new NetworkInput(1, "0,0,1,1".split(","));
+            testInputs[3] = new NetworkInput(0, "1,1,0,0".split(","));
+            testNetwork.TrainNetwork(testInputs, 10, 2, 6);
+        }
     }
 }

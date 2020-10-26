@@ -16,8 +16,17 @@ public class NetworkInput
         // set correct output index to one in vector
         correctOutputVector[correctOutput] = 1;
 
-        // convert list of input values from strings to normalized doubles
-        for (int i = 0; i < inputValues.length; i++)
-            this.inputValues[i] = Double.parseDouble(inputValues[i]) / 255.0;
+        if (!Main.DEBUG)
+        {
+            // convert list of input values from strings to normalized doubles
+            for (int i = 0; i < inputValues.length; i++)
+                this.inputValues[i] = Double.parseDouble(inputValues[i]) / 255.0;
+        }
+        else
+        {
+            // convert list of input values from strings to normalized doubles
+            for (int i = 0; i < inputValues.length; i++)
+                this.inputValues[i] = Double.parseDouble(inputValues[i]);
+        }
     }
 }
