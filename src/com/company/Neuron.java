@@ -127,6 +127,18 @@ public class Neuron
         return inputs;
     }
 
+    // getter for bias
+    public double GetBias()
+    {
+        return bias;
+    }
+
+    // setter for bias, used in loading network
+    public void SetBias(double bias)
+    {
+        this.bias = bias;
+    }
+
     // getter for weights
     public double[] GetWeights()
     {

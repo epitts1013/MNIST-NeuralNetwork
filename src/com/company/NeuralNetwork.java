@@ -39,6 +39,33 @@ public class NeuralNetwork
             outputLayer[i] = new Neuron(midLayers[numMidLayers-1]);
     }
 
+    // manually set weights and biases of network based on loaded data
+    public void LoadNetwork(double[][] midLayerBiases, double[][][] midLayerWeights, double[] outputLayerBiases, double[][] outputLayerWeights)
+    {
+        // set mid layer biases and weights
+        for (int i = 0; i < midLayers.length; i++)
+        {
+            for (int j = 0; j < midLayers[i].length; j++)
+            {
+                midLayers[i][j].SetBias(midLayerBiases[i][j]);
+                midLayers[i][j].SetWeights(midLayerWeights[i][j]);
+            }
+        }
+
+        // set final layer biases and weights
+        for (int i = 0; i < outputLayer.length; i++)
+        {
+            outputLayer[i].SetBias(outputLayerBiases[i]);
+            outputLayer[i].SetWeights(outputLayerWeights[i]);
+        }
+    }
+
+    // output weights and biases of network to text file for later loading
+    public void SaveNetwork()
+    {
+        // TODO: Implement Save Network
+    }
+
     // runs training algorithms on networks using the given training set,
     // learning rate, mini-batch size, and number of epochs
     public void TrainNetwork(NetworkInput[] trainingData, double learnRate, int batchSize, int numEpochs)
@@ -117,10 +144,10 @@ public class NeuralNetwork
             // compute bias gradient for current layer
             for (int j = 0; j < midLayers[i].length; j++)
             {
+                double sumOfBiasScaledWeights = 0;
                 if (i + 1 == midLayers.length)  // if on final hidden layer
                 {
                     // calculate Sum(Weight[jk] * BiasGradient[j])
-                    double sumOfBiasScaledWeights = 0;
                     for (Neuron neuron : outputLayer)
                         sumOfBiasScaledWeights += neuron.GetWeights()[j] * neuron.GetBiasGradient();
 
@@ -131,7 +158,6 @@ public class NeuralNetwork
                 else  // for all other hidden layers
                 {
                     // calculate Sum(Weight[jk] * BiasGradient[j])
-                    double sumOfBiasScaledWeights = 0;
                     for (Neuron neuron : midLayers[i + 1])
                         sumOfBiasScaledWeights += neuron.GetWeights()[j] * neuron.GetBiasGradient();
 
