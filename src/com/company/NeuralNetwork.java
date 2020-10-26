@@ -48,22 +48,36 @@ public class NeuralNetwork
         {
             // shuffle training data
             Collections.shuffle(Arrays.asList(trainingData));
+
+            // array stores a mini-batch during use
+            NetworkInput[] miniBatch = new NetworkInput[10];
             
             // loop through mini-batches
-            for (int j = 0; j < trainingData.length; j += 10)
+            for (int j = 0; j < trainingData.length; j += batchSize)
             {
-                // loop through each mini-batch
-                for (int k = j; k < j + 10; k++)
-                {
-                    // run network on training case
-                    RunNetwork(trainingData[k].inputValues);
-                }
+                // copy a subset of the training data into miniBatch
+                System.arraycopy(trainingData, j, miniBatch, 0, batchSize);
 
-                // TODO: WHY ARE THERE SO MANY FOR-LOOPS
-                //  END MY SUFFERING
-
+                // run mini-batch
+                RunMiniBatch(miniBatch);
             }
         }
+    }
+
+    // runs mini-batch, running back propogation algorithm on each input in batch
+    private void RunMiniBatch(NetworkInput[] miniBatch)
+    {
+        // run and calculate gradient for each case in mini batch
+        for (int i = 0; i < miniBatch.length; i++)
+        {
+            RunNetwork(miniBatch[i].inputValues);
+            BackPropogate(miniBatch[i].correctOutputVector);
+        }        
+    }
+
+    private void BackPropogate(int[] correctOutputVector)
+    {
+
     }
 
     // runs through test data set and gives back array of correctly answered inputs
