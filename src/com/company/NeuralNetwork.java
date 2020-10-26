@@ -68,10 +68,10 @@ public class NeuralNetwork
     private void RunMiniBatch(NetworkInput[] miniBatch, double learnRate)
     {
         // run and calculate gradient for each case in mini batch
-        for (int i = 0; i < miniBatch.length; i++)
+        for (NetworkInput networkInput : miniBatch)
         {
-            RunNetwork(miniBatch[i].inputValues);
-            BackPropagate(miniBatch[i].correctOutputVector);
+            RunNetwork(networkInput.inputValues);
+            BackPropagate(networkInput.correctOutputVector);
         }
 
         // apply gradients to all non-input neurons
@@ -137,7 +137,14 @@ public class NeuralNetwork
             }
 
             // compute weight gradients for current layer
+            for (Neuron neuron : midLayers[i])
+            {
+                double[] weightGradient = new double[neuron.GetInputs().length];
+                for (int j = 0; j < neuron.GetInputs().length; j++)
+                    weightGradient[j] = neuron.GetInputs()[j].GetActivation() * neuron.GetBiasGradient();
 
+                neuron.SetWeightGradient(weightGradient);
+            }
         }
     }
 
