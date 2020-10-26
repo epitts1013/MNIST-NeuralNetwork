@@ -5,10 +5,13 @@ import java.util.Arrays;
 public class Main
 {
     // boolean determines whether file paths are gotten from command line or hardcoded into program
-    static final boolean USE_CMD_ARGS = true;
+    static final boolean USE_CMD_ARGS = false;
 
     // hardcoded values for training and testing dataset size
     static final int TRAINING_DATA_SIZE = 60000, TESTING_DATA_SIZE = 10000;
+
+    // boolean activates debug statements
+    static final boolean DEBUG = false;
 
     public static void main(String[] args)
     {
@@ -30,8 +33,8 @@ public class Main
         }
         else  // get input data file paths from hard-coded file paths
         {
-            trainingDataFilePath = "{some path}/mnist_train.csv";
-            testingDataFilePath = "{some path}/mnist_test.csv";
+            trainingDataFilePath = "C:\\Users\\super\\Documents\\Code\\MNIST-NeuralNetwork\\mnist_train.csv";
+            testingDataFilePath = "C:\\Users\\super\\Documents\\Code\\MNIST-NeuralNetwork\\mnist_test.csv";
         }
 
         // create file objects for training and testing data
@@ -82,7 +85,12 @@ public class Main
         }
 
         // run network training
-        mnistNetwork.TrainNetwork(trainingData);
+        mnistNetwork.TrainNetwork(trainingData, 3.0, 10, 30);
+
+        // DEBUG
+        if (DEBUG)
+            mnistNetwork.RunNetwork(trainingData[1].inputValues);
+
         // test network on training data
         boolean[] correctOutputs = mnistNetwork.TestNetwork(trainingData);
 

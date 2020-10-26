@@ -79,4 +79,16 @@ public class Neuron
         else
             System.out.println("Value for neuron cannot be manually set if it is not initialized as an input neuron");
     }
+
+    // getter for weights
+    public double[] GetWeights()
+    {
+        return weights;
+    }
+
+    // setter for weights, used for loading network
+    public void SetWeights(double[] weights)
+    {
+        this.weights = weights;
+    }
 }

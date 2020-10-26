@@ -1,5 +1,9 @@
 package com.company;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 public class NeuralNetwork
 {
     // neuron arrays
@@ -36,10 +40,12 @@ public class NeuralNetwork
             outputLayer[i] = new Neuron(midLayers[numMidLayers-1]);
     }
 
-    // runs training algorithms on networks using the given training set
-    public void TrainNetwork(NetworkInput[] trainingData)
+    // runs training algorithms on networks using the given training set,
+    // learning rate, mini-batch size, and number of epochs
+    public void TrainNetwork(NetworkInput[] trainingData, double learnRate, int batchSize, int numEpochs)
     {
-        // TODO: Implement TrainNetwork
+        // shuffle training data
+        Collections.shuffle(Arrays.asList(trainingData));
     }
 
     // runs through test data set and gives back array of correctly answered inputs
@@ -92,6 +98,4 @@ public class NeuralNetwork
 
         return maxActivation;
     }
-
-
 }
