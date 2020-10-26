@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 public class NeuralNetwork
@@ -44,8 +43,27 @@ public class NeuralNetwork
     // learning rate, mini-batch size, and number of epochs
     public void TrainNetwork(NetworkInput[] trainingData, double learnRate, int batchSize, int numEpochs)
     {
-        // shuffle training data
-        Collections.shuffle(Arrays.asList(trainingData));
+        // loop through set number of epochs
+        for (int i = 0; i < numEpochs; i++)
+        {
+            // shuffle training data
+            Collections.shuffle(Arrays.asList(trainingData));
+            
+            // loop through mini-batches
+            for (int j = 0; j < trainingData.length; j += 10)
+            {
+                // loop through each mini-batch
+                for (int k = j; k < j + 10; k++)
+                {
+                    // run network on training case
+                    RunNetwork(trainingData[k].inputValues);
+                }
+
+                // TODO: WHY ARE THERE SO MANY FOR-LOOPS
+                //  END MY SUFFERING
+
+            }
+        }
     }
 
     // runs through test data set and gives back array of correctly answered inputs

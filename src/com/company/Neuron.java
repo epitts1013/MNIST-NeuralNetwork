@@ -13,6 +13,10 @@ public class Neuron
     private double[] weights;
     private final Neuron[] inputs;
 
+    // gradient variables
+    private double sumBiasGradients;
+    private double[] sumWeightGradients;
+
     // Constructor for neuron used for network input
     public Neuron()
     {
@@ -65,6 +69,16 @@ public class Neuron
             System.out.println("Activation cannot be calculated for input neuron");
     }
 
+    public void ApplyGradients(double learnRate, int batchSize)
+    {
+        // apply bias gradient
+        bias = bias - (learnRate / batchSize * sumBiasGradients);
+
+        // apply weight gradient
+        for (int i = 0; i < sumWeightGradients.length; i++)
+            weights[i] = weights[i] - ((learnRate / batchSize) * sumWeightGradients[i]);
+    }
+
     // getter for output
     public double GetActivation()
     {
@@ -90,5 +104,46 @@ public class Neuron
     public void SetWeights(double[] weights)
     {
         this.weights = weights;
+    }
+
+    // helper methods
+    private double[] AddArrays(double[] a, double[] b)
+    {
+        if (a.length == b.length)
+        {
+            double[] out = new double[a.length];
+
+            for (int i = 0; i < out.length; i++)
+            {
+                out[i] = a[i] + b[i];
+            }
+
+            return out;
+        }
+        else
+        {
+            System.out.println("Arrays must be same size to add");
+            return null;
+        }
+    }
+
+    private double[] SubArrays(double[] a, double[] b)
+    {
+        if (a.length == b.length)
+        {
+            double[] out = new double[a.length];
+
+            for (int i = 0; i < out.length; i++)
+            {
+                out[i] = a[i] - b[i];
+            }
+
+            return out;
+        }
+        else
+        {
+            System.out.println("Arrays must be same size to subtract");
+            return null;
+        }
     }
 }
