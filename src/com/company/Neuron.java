@@ -14,7 +14,9 @@ public class Neuron
     private final Neuron[] inputs;
 
     // gradient variables
+    private double biasGradient;
     private double sumBiasGradients;
+    private double[] weightGradient;
     private double[] sumWeightGradients;
 
     // Constructor for neuron used for network input
@@ -27,6 +29,10 @@ public class Neuron
         bias = 0;
         inputs = null;
         weights = null;
+        biasGradient = 0;
+        sumBiasGradients = 0;
+        weightGradient = null;
+        sumWeightGradients = null;
     }
 
     // Constructor for neuron with neuron outputs as its inputs
@@ -38,11 +44,22 @@ public class Neuron
         // initialize variables
         bias = Math.random();
         this.inputs = inputs;
-        this.weights = new double[inputs.length];
+        weights = new double[inputs.length];
+        biasGradient = 0;
+        sumBiasGradients = 0;
+        weightGradient = new double[inputs.length];
+        sumWeightGradients = new double[inputs.length];
 
         // generate random initial weights
         for (int i = 0; i < weights.length; i++)
             weights[i] = Math.random();
+
+        // initialize values of weightGradient and sumWeightGradient
+        for (int i = 0; i < weightGradient.length; i++)
+        {
+            weightGradient[i] = 0;
+            sumWeightGradients[i] = 0;
+        }
     }
 
     // Calculates output of neuron
@@ -77,6 +94,16 @@ public class Neuron
         // apply weight gradient
         for (int i = 0; i < sumWeightGradients.length; i++)
             weights[i] = weights[i] - ((learnRate / batchSize) * sumWeightGradients[i]);
+
+        // zero out gradient variables
+        biasGradient = 0;
+        sumBiasGradients = 0;
+
+        for (int i = 0; i < weightGradient.length; i++)
+        {
+            weightGradient[i] = 0;
+            sumWeightGradients[i] = 0;
+        }
     }
 
     // getter for output
@@ -94,16 +121,48 @@ public class Neuron
             System.out.println("Value for neuron cannot be manually set if it is not initialized as an input neuron");
     }
 
+    // getter for inputs
+    public Neuron[] GetInputs()
+    {
+        return inputs;
+    }
+
     // getter for weights
     public double[] GetWeights()
     {
         return weights;
     }
 
-    // setter for weights, used for loading network
+    // setter for weights, used for loading trained network
     public void SetWeights(double[] weights)
     {
         this.weights = weights;
+    }
+
+    // getter for bias gradient
+    public double GetBiasGradient()
+    {
+        return biasGradient;
+    }
+
+    // setter for bias gradient
+    public void SetBiasGradient(double biasGradient)
+    {
+        this.biasGradient = biasGradient;
+        sumBiasGradients += biasGradient;
+    }
+
+    // getter for weight gradient
+    public double[] GetWeightGradient()
+    {
+        return weightGradient;
+    }
+
+    // setter for weight gradient
+    public void SetWeightGradient(double[] weightGradient)
+    {
+        this.weightGradient = weightGradient;
+        sumWeightGradients = AddArrays(this.sumWeightGradients, weightGradient);
     }
 
     // helper methods

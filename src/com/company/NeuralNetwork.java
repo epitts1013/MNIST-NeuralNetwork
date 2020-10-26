@@ -59,24 +59,52 @@ public class NeuralNetwork
                 System.arraycopy(trainingData, j, miniBatch, 0, batchSize);
 
                 // run mini-batch
-                RunMiniBatch(miniBatch);
+                RunMiniBatch(miniBatch, learnRate);
             }
         }
     }
 
-    // runs mini-batch, running back propogation algorithm on each input in batch
-    private void RunMiniBatch(NetworkInput[] miniBatch)
+    // runs mini-batch, running back propagation algorithm on each input in batch
+    private void RunMiniBatch(NetworkInput[] miniBatch, double learnRate)
     {
         // run and calculate gradient for each case in mini batch
         for (int i = 0; i < miniBatch.length; i++)
         {
             RunNetwork(miniBatch[i].inputValues);
-            BackPropogate(miniBatch[i].correctOutputVector);
-        }        
+            BackPropagate(miniBatch[i].correctOutputVector);
+        }
+
+        // apply gradients to all non-input neurons
+        // apply gradients for mid layers
+        for (Neuron[] layer : midLayers)
+        {
+            for (Neuron neuron : layer)
+                neuron.ApplyGradients(learnRate, miniBatch.length);
+        }
+
+        // apply gradients for final layer
+        for (Neuron neuron : outputLayer)
+            neuron.ApplyGradients(learnRate, miniBatch.length);
     }
 
-    private void BackPropogate(int[] correctOutputVector)
+    // runs back propagation algorithm for current training case
+    private void BackPropagate(int[] correctOutputVector)
     {
+        // compute bias gradient for output layer
+        for (int i = 0; i < outputLayer.length; i++)
+        {
+            double biasGradient = (outputLayer[i].GetActivation() - correctOutputVector[i]) * outputLayer[i].GetActivation() * (1 - outputLayer[i].GetActivation());
+            outputLayer[i].SetBiasGradient(biasGradient);
+        }
+        // compute weight gradient for output layer
+        for (Neuron neuron : outputLayer)
+        {
+            double[] weightGradient = new double[neuron.GetInputs().length];
+            for (int j = 0; j < neuron.GetInputs().length; j++)
+                weightGradient[j] = neuron.GetInputs()[j].GetActivation() * neuron.GetBiasGradient();
+
+            neuron.SetWeightGradient(weightGradient);
+        }
 
     }
 
