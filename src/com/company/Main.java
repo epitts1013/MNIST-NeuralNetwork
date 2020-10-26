@@ -11,7 +11,7 @@ public class Main
     static final int TRAINING_DATA_SIZE = 60000, TESTING_DATA_SIZE = 10000;
 
     // boolean activates debug statements
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     public static void main(String[] args)
     {
@@ -104,6 +104,7 @@ public class Main
         if (DEBUG)
         {
             NeuralNetwork testNetwork = new NeuralNetwork(4, 1, 3, 2);
+            testNetwork.LoadNetwork(new double[][]{{0.1, -0.36, -0.31}}, new double[][][]{{{-0.21, 0.72, -0.25, 1}, {-0.94, -0.41, -0.47, 0.63}, {0.15, 0.55, -0.49, -0.75}}}, new double[]{0.16, -0.46}, new double[][]{{0.76, 0.48, -0.73}, {0.34, 0.89, -0.23}});
             NetworkInput[] testInputs = new NetworkInput[4];
             testInputs[0] = new NetworkInput(1, "0,1,0,1".split(","));
             testInputs[1] = new NetworkInput(0, "1,0,1,0".split(","));
