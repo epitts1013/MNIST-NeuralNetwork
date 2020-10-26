@@ -84,6 +84,7 @@ public class Main
             System.out.println("An error occurred while reading the training data file");
         }
 
+        System.out.println("Beginning training");
         // run network training
         mnistNetwork.TrainNetwork(trainingData, 3.0, 10, 30);
 
@@ -98,6 +99,6 @@ public class Main
         int numCorrect = 0;
         for (boolean output : correctOutputs)
             if (output) numCorrect++;
-        System.out.println("Network answered " + ((numCorrect / correctOutputs.length) * 100) + "% of training cases correctly.");
+        System.out.println("Network answered " + (((double)numCorrect / (double)correctOutputs.length) * 100) + "% of training cases correctly.");
     }
 }

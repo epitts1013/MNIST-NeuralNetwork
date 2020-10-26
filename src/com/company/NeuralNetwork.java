@@ -61,6 +61,8 @@ public class NeuralNetwork
                 // run mini-batch
                 RunMiniBatch(miniBatch, learnRate);
             }
+
+            System.out.println("Finished epoch " + (i + 1));
         }
     }
 

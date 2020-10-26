@@ -80,7 +80,7 @@ public class Neuron
             sum += bias;
 
             // use sum as input for sigmoid function
-            activation = 1 / (1 + Math.pow(Math.E, -sum));
+            activation = 1.0 / (1.0 + Math.pow(Math.E, -sum));
         }
         else
             System.out.println("Activation cannot be calculated for input neuron");
