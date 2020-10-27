@@ -1,3 +1,15 @@
+/*
+    Name: Eric Pitts
+    Student#: 102-57-729
+    Date: 10/27/2020
+    Assignment 2: MNIST Neural Network
+    Description: Neural Network will take in an array of doubles representing the normalized grayscale
+    values of each pixel of a 28x28 handwritten digit (MNIST Dataset) and output the number that it
+    determines that the digit is supposed to be. By default, main will instantiate a NeuralNetwork object
+    with the required specifications for the MNIST Neural Network, but a NeuralNetwork object can be instantiated
+    with a variable number of inputs, hidden layers, nodes in hidden layers, and nodes in output layer.
+ */
+
 package com.company;
 import java.io.*;
 import java.util.Arrays;
