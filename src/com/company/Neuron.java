@@ -200,24 +200,4 @@ public class Neuron
             return null;
         }
     }
-
-    private double[] SubArrays(double[] a, double[] b)
-    {
-        if (a.length == b.length)
-        {
-            double[] out = new double[a.length];
-
-            for (int i = 0; i < out.length; i++)
-            {
-                out[i] = a[i] - b[i];
-            }
-
-            return out;
-        }
-        else
-        {
-            System.out.println("Arrays must be same size to subtract");
-            return null;
-        }
-    }
 }

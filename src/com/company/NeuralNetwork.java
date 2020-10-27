@@ -1,6 +1,8 @@
 package com.company;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
+
 
 public class NeuralNetwork
 {
@@ -38,7 +40,50 @@ public class NeuralNetwork
             outputLayer[i] = new Neuron(midLayers[numMidLayers-1]);
     }
 
-    // manually set weights and biases of network based on loaded data
+    // loads network from text file at provided file path
+    // If network parameters at beginning of file do not match network
+    // parameters are trying to be loaded onto, halts loading operation and prints error message
+    public boolean LoadNetwork(String filePath)
+    {
+        // get network parameters
+        int[] networkParams = new int[]{inputLayer.length, midLayers.length, midLayers[0].length, outputLayer.length};
+
+        try
+        {
+            // create BufferedReader based on given file path
+            File networkFile = new File(filePath);
+            BufferedReader fileReader = new BufferedReader(new FileReader(networkFile));
+
+            // check network parameters
+            for (int param : networkParams)
+            {
+                if (param != Integer.parseInt(fileReader.readLine()))
+                {
+                    System.out.println("Given network file does not match network parameters, halting load\n");
+                    return false;
+                }
+            }
+
+            // TODO: Make file input parser for network loading
+
+            // close BufferedReader
+            fileReader.close();
+
+            return true;
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("The specified file could not be found: \"" + filePath + "\"");
+            return false;
+        }
+        catch (IOException e)
+        {
+            System.out.println("An error occurred while reading the training data file");
+            return false;
+        }
+    }
+
+    // manually set weights and biases of network based on parameters
     public void LoadNetwork(double[][] midLayerBiases, double[][][] midLayerWeights, double[] outputLayerBiases, double[][] outputLayerWeights)
     {
         // set mid layer biases and weights
@@ -60,6 +105,13 @@ public class NeuralNetwork
     }
 
     // output weights and biases of network to text file for later loading
+    /* Output Format
+        numInputs
+        numMidLayers
+        numMidLayerNodes
+        numOutputLayerNodes
+
+    */
     public void SaveNetwork()
     {
         // TODO: Implement Save Network

@@ -94,10 +94,12 @@ public class Main
         }
         catch (FileNotFoundException e)  // the file path given by trainingDataFilePath was invalid
         {
+            // FIXME: Always displays trainingDataFilePath even if it was not the file that threw the error
             System.out.println("The specified file could not be found: \"" + trainingDataFilePath + "\"");
         }
         catch (IOException e)  // an error occurred during file reading
         {
+            // FIXME: Always says error was in training file reading even if it was not the file that threw the error
             System.out.println("An error occurred while reading the training data file");
         }
 
@@ -141,13 +143,19 @@ public class Main
                     break;
 
                 case "2":
-                    // TODO: Make file input parser for network loading
+                    // TODO: Get network file from stdin
+                    String networkFile = "";
+                    if (mnistNetwork.LoadNetwork(networkFile))
+                    {
+                        System.out.println("Network Loading Completed\nPress Enter to Continue\n");
 
-                    System.out.println("Network Loading Completed\nPress Enter to Continue\n");
+                        // set isTrained to true after successful file parse
+                        isTrained = true;
+                    }
+                    else
+                        System.out.println("Network Loading Failed\nPress Enter to Continue\n");
+
                     kbInput.nextLine();
-
-                    // set isTrained to true after successful file parse
-                    isTrained = true;
                     break;
 
                 case "3":
