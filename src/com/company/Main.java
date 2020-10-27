@@ -97,7 +97,16 @@ public class Main
             int numCorrect = 0;
             for (boolean output : correctOutputs)
                 if (output) numCorrect++;
-            System.out.println("Network answered " + (((double)numCorrect / (double)correctOutputs.length) * 100) + "% of training cases correctly.");
+            System.out.println("Network answered " + numCorrect + "/" + correctOutputs.length + " (" + (((double)numCorrect / (double)correctOutputs.length) * 100) + "%) of training cases correctly.");
+
+            // test network on training data
+            correctOutputs = mnistNetwork.TestNetwork(trainingData);
+
+            // calculate % of training data answered successfully
+            numCorrect = 0;
+            for (boolean output : correctOutputs)
+                if (output) numCorrect++;
+            System.out.println("Network answered " + numCorrect + "/" + correctOutputs.length + " (" + (((double)numCorrect / (double)correctOutputs.length) * 100) + "%) of training cases correctly.");
         }
 
         // DEBUG

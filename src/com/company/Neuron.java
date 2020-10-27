@@ -42,7 +42,7 @@ public class Neuron
         INPUT_NEURON = false;
 
         // initialize variables
-        bias = Math.random();
+        bias = (Math.random() > 0.5) ? Math.random() : -Math.random();
         this.inputs = inputs;
         weights = new double[inputs.length];
         biasGradient = 0;
@@ -52,7 +52,7 @@ public class Neuron
 
         // generate random initial weights
         for (int i = 0; i < weights.length; i++)
-            weights[i] = Math.random();
+            weights[i] = (Math.random() > 0.5) ? Math.random() : -Math.random();
 
         // initialize values of weightGradient and sumWeightGradient
         for (int i = 0; i < weightGradient.length; i++)
