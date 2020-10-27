@@ -65,6 +65,7 @@ public class Main
             String line;
             String[] splitLine;
 
+            System.out.println("Loading Training Data...");
             // read data from training data file
             for (int i = 0; (line = bufferedReader.readLine()) != null; i++)
             {
@@ -72,10 +73,12 @@ public class Main
                 splitLine = line.split(",");
                 trainingData[i] = new NetworkInput(Integer.parseInt(splitLine[0]), Arrays.copyOfRange(splitLine, 1, splitLine.length));
             }
+            System.out.println("Finished Loading Training Data");
 
             // attempt to initialize BufferedReader for testing data
             bufferedReader = new BufferedReader(new FileReader(testingDataFile));
 
+            System.out.println("Loading Testing Data...");
             // read data from testing data file
             for (int i = 0; (line = bufferedReader.readLine()) != null; i++)
             {
@@ -83,6 +86,7 @@ public class Main
                 splitLine = line.split(",");
                 testingData[i] = new NetworkInput(Integer.parseInt(splitLine[0]), Arrays.copyOfRange(splitLine, 1, splitLine.length));
             }
+            System.out.println("Finished Loading testing Data");
 
             // close buffered reader
             bufferedReader.close();
@@ -98,7 +102,7 @@ public class Main
 
         if (!DEBUG)
         {
-            System.out.println("Beginning training");
+            System.out.println("Beginning Training");
             // run network training
             mnistNetwork.TrainNetwork(trainingData, 3.0, 10, 30);
 

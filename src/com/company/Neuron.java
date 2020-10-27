@@ -86,6 +86,7 @@ public class Neuron
             System.out.println("Activation cannot be calculated for input neuron");
     }
 
+    // applies the weight and bias gradient sums to the weights and bias
     public void ApplyGradients(double learnRate, int batchSize)
     {
         // apply bias gradient
@@ -106,6 +107,7 @@ public class Neuron
         }
     }
 
+    // region GettersAndSetters
     // getter for output
     public double GetActivation()
     {
@@ -176,6 +178,7 @@ public class Neuron
         this.weightGradient = weightGradient;
         sumWeightGradients = AddArrays(this.sumWeightGradients, weightGradient);
     }
+    // endregion
 
     // helper methods
     private double[] AddArrays(double[] a, double[] b)
