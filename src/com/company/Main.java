@@ -13,6 +13,7 @@
 package com.company;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main
 {
@@ -73,7 +74,7 @@ public class Main
                 splitLine = line.split(",");
                 trainingData[i] = new NetworkInput(Integer.parseInt(splitLine[0]), Arrays.copyOfRange(splitLine, 1, splitLine.length));
             }
-            System.out.println("Finished Loading Training Data");
+            System.out.println("Finished Loading Training Data\n");
 
             // attempt to initialize BufferedReader for testing data
             bufferedReader = new BufferedReader(new FileReader(testingDataFile));
@@ -86,7 +87,7 @@ public class Main
                 splitLine = line.split(",");
                 testingData[i] = new NetworkInput(Integer.parseInt(splitLine[0]), Arrays.copyOfRange(splitLine, 1, splitLine.length));
             }
-            System.out.println("Finished Loading testing Data");
+            System.out.println("Finished Loading testing Data\n");
 
             // close buffered reader
             bufferedReader.close();
@@ -100,29 +101,111 @@ public class Main
             System.out.println("An error occurred while reading the training data file");
         }
 
-        if (!DEBUG)
+        // region UI Variables
+        // create keyboard scanner
+        Scanner kbInput = new Scanner(System.in);
+        // create boolean for breaking loop
+        boolean continueFlag = true;
+        // create string for reading input
+        String uInput;
+        // boolean array for storing the correct outputs of network test
+        boolean[] correctOutputs;
+        // int for storing the number of correctly guessed cases in network test
+        int numCorrect;
+        // boolean for tracking if network has been trained or loaded yet
+        boolean isTrained = false;
+        // endregion
+
+        while (continueFlag)
         {
-            System.out.println("Beginning Training");
-            // run network training
-            mnistNetwork.TrainNetwork(trainingData, 3.0, 10, 30);
+            // print menu dialogue
+            System.out.println("Main Menu\n(1) Train Network\n(2) Load Network State From File\n(3) Test Network on Training Data\n(4) Test Network on Testing Data\n(5) Save Network State To File\n(0) Exit\n");
+            System.out.print("Please select the number of a menu item: ");
 
-            // test network on training data
-            boolean[] correctOutputs = mnistNetwork.TestNetwork(trainingData);
+            // grab user input from stdin
+            uInput = kbInput.nextLine();
 
-            // calculate % of training data answered successfully
-            int numCorrect = 0;
-            for (boolean output : correctOutputs)
-                if (output) numCorrect++;
-            System.out.println("Network answered " + numCorrect + "/" + correctOutputs.length + " (" + (((double)numCorrect / (double)correctOutputs.length) * 100) + "%) of training cases correctly.");
+            switch (uInput)
+            {
+                case "1":
+                    System.out.println("Beginning Training");
 
-            // test network on training data
-            correctOutputs = mnistNetwork.TestNetwork(testingData);
+                    // run network training
+                    mnistNetwork.TrainNetwork(trainingData, 3.0, 10, 30);
 
-            // calculate % of training data answered successfully
-            numCorrect = 0;
-            for (boolean output : correctOutputs)
-                if (output) numCorrect++;
-            System.out.println("Network answered " + numCorrect + "/" + correctOutputs.length + " (" + (((double)numCorrect / (double)correctOutputs.length) * 100) + "%) of testing cases correctly.");
+                    System.out.println("Network Training Completed\nPress Enter to Continue\n");
+                    kbInput.nextLine();
+
+                    // set isTrained to true after completion of network training
+                    isTrained = true;
+                    break;
+
+                case "2":
+                    // TODO: Make file input parser for network loading
+
+                    System.out.println("Network Loading Completed\nPress Enter to Continue\n");
+                    kbInput.nextLine();
+
+                    // set isTrained to true after successful file parse
+                    isTrained = true;
+                    break;
+
+                case "3":
+                    if (isTrained)  // if network has already been trained
+                    {
+                        // test network on training data
+                        correctOutputs = mnistNetwork.TestNetwork(trainingData);
+
+                        // calculate % of training data answered successfully
+                        numCorrect = 0;
+                        for (boolean output : correctOutputs)
+                            if (output) numCorrect++;
+                        System.out.println("Network answered " + numCorrect + "/" + correctOutputs.length + " (" + (((double) numCorrect / (double) correctOutputs.length) * 100) + "%) of training cases correctly.");
+                    }
+                    else  // if network has not already been trained
+                        System.out.println("Network must be trained or loaded from file to select this option");
+
+                    System.out.println("Press Enter to Continue\n");
+                    kbInput.nextLine();
+                    break;
+
+                case "4":
+                    if (isTrained)  // if network has already been trained
+                    {
+                        // test network on testing data
+                        correctOutputs = mnistNetwork.TestNetwork(testingData);
+
+                        // calculate % of testing data answered successfully
+                        numCorrect = 0;
+                        for (boolean output : correctOutputs)
+                            if (output) numCorrect++;
+                        System.out.println("Network answered " + numCorrect + "/" + correctOutputs.length + " (" + (((double) numCorrect / (double) correctOutputs.length) * 100) + "%) of testing cases correctly.");
+                    }
+                    else  // if network has not already been trained
+                        System.out.println("Network must be trained or loaded from file to select this option");
+
+                    System.out.println("Press Enter to Continue\n");
+                    kbInput.nextLine();
+                    break;
+
+                case "5":
+                    // save network state to file
+                    mnistNetwork.SaveNetwork();
+
+                    System.out.println("Network Save Complete\nPress Enter to Continue\n");
+                    kbInput.nextLine();
+                    break;
+
+                case "0":
+                    continueFlag = false;
+                    break;
+
+                default:
+                    System.out.println("You have entered an invalid input, please enter only the number associated with your choice.\n");
+                    System.out.println("Press Enter to Continue\n");
+                    kbInput.nextLine();
+                    break;
+            }
         }
 
         // DEBUG
