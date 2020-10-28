@@ -57,6 +57,7 @@ public class Main
         // create BufferedReader for reading in training data
         BufferedReader bufferedReader;
 
+        // region Read In Data Files
         try
         {
             // attempt to initialize BufferedReader for training data
@@ -92,7 +93,7 @@ public class Main
             // close buffered reader
             bufferedReader.close();
         }
-        catch (FileNotFoundException e)  // the file path given by trainingDataFilePath was invalid
+        catch (FileNotFoundException e)  // the file path given was invalid
         {
             // FIXME: Always displays trainingDataFilePath even if it was not the file that threw the error
             System.out.println("The specified file could not be found: \"" + trainingDataFilePath + "\"");
@@ -102,8 +103,9 @@ public class Main
             // FIXME: Always says error was in training file reading even if it was not the file that threw the error
             System.out.println("An error occurred while reading the training data file");
         }
+        // endregion
 
-        // region UI Variables
+        // region Menu Variables
         // create keyboard scanner
         Scanner kbInput = new Scanner(System.in);
         // create boolean for breaking loop
@@ -118,6 +120,7 @@ public class Main
         boolean isTrained = false;
         // endregion
 
+        // region Menu Loop
         while (continueFlag)
         {
             // print menu dialogue
@@ -215,6 +218,7 @@ public class Main
                     break;
             }
         }
+        // endregion
 
         // DEBUG
         if (DEBUG)

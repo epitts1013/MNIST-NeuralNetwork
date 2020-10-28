@@ -153,6 +153,14 @@ public class Neuron
         this.weights = weights;
     }
 
+    // alternate setter for weights, takes an array of strings and converts them to doubles
+    public void SetWeights(String[] strWeights)
+    {
+        // parse doubles from the string of weights
+        for (int i = 0; i < strWeights.length; i++)
+            weights[i] = Double.parseDouble(strWeights[i]);
+    }
+
     // getter for bias gradient
     public double GetBiasGradient()
     {

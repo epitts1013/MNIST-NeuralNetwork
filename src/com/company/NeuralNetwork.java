@@ -54,31 +54,55 @@ public class NeuralNetwork
             File networkFile = new File(filePath);
             BufferedReader fileReader = new BufferedReader(new FileReader(networkFile));
 
-            // check network parameters
+            // check network parameters from file, if they match the network parameters of this network
+            // continue parsing file, else give error message and halt loading
             for (int param : networkParams)
             {
                 if (param != Integer.parseInt(fileReader.readLine()))
                 {
                     System.out.println("Given network file does not match network parameters, halting load\n");
+
+                    // close buffered reader
+                    fileReader.close();
+
+                    // halt loading
                     return false;
                 }
             }
 
-            // TODO: Make file input parser for network loading
+            // read in bias and weight values for hidden layers
+            String[] splitLine; // stores comma seperated tokens from line
+            for (Neuron[] layer : midLayers)
+            {
+                for (Neuron neuron : layer)
+                {
+                    splitLine = fileReader.readLine().split(",");
+                    neuron.SetBias(Double.parseDouble(splitLine[0]));
+                    neuron.SetWeights(Arrays.copyOfRange(splitLine, 1, splitLine.length));
+                }
+            }
+
+            // read in bias and weight values for final layer
+            for (Neuron neuron : outputLayer)
+            {
+                splitLine = fileReader.readLine().split(",");
+                neuron.SetBias(Double.parseDouble(splitLine[0]));
+                neuron.SetWeights(Arrays.copyOfRange(splitLine, 1, splitLine.length));
+            }
 
             // close BufferedReader
             fileReader.close();
 
             return true;
         }
-        catch (FileNotFoundException e)
+        catch (FileNotFoundException e)  // the file path given was invalid
         {
             System.out.println("The specified file could not be found: \"" + filePath + "\"");
             return false;
         }
-        catch (IOException e)
+        catch (IOException e) // an error occurred during file reading
         {
-            System.out.println("An error occurred while reading the training data file");
+            System.out.println("An error occurred while reading the network data file");
             return false;
         }
     }
@@ -110,7 +134,7 @@ public class NeuralNetwork
         numMidLayers
         numMidLayerNodes
         numOutputLayerNodes
-
+        csv of bias and weights of each node
     */
     public void SaveNetwork()
     {
