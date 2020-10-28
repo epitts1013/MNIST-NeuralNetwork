@@ -201,9 +201,10 @@ public class Main
 
                 case "5":
                     // save network state to file
-                    mnistNetwork.SaveNetwork();
-
-                    System.out.println("Network Save Complete\nPress Enter to Continue\n");
+                    if (mnistNetwork.SaveNetwork())
+                        System.out.println("Network Save Complete\nPress Enter to Continue\n");
+                    else
+                        System.out.println("Network Save Failed\nPress Enter to Continue\n");
                     kbInput.nextLine();
                     break;
 

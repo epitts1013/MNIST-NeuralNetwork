@@ -2,7 +2,9 @@ package com.company;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
-
+import java.lang.StringBuilder;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class NeuralNetwork
 {
@@ -130,6 +132,7 @@ public class NeuralNetwork
     }
 
     // output weights and biases of network to text file for later loading
+    // returns true or false depending on success of file output
     /* Output Format
         numInputs
         numMidLayers
@@ -137,9 +140,56 @@ public class NeuralNetwork
         numOutputLayerNodes
         csv of bias and weights of each node
     */
-    public void SaveNetwork()
+    public boolean SaveNetwork()
     {
-        // TODO: Implement Save Network
+        // string builder object for creating string in loops without performance degradation
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // append network parameters to output string
+        stringBuilder.append(inputLayer.length).append("\n");
+        stringBuilder.append(midLayers.length).append("\n");
+        stringBuilder.append(midLayers[0].length).append("\n");
+        stringBuilder.append(outputLayer.length).append("\n");
+
+        // append midLayer weights and biases to output string
+        for (Neuron[] layer : midLayers)
+        {
+            for (Neuron neuron : layer)
+            {
+                stringBuilder.append(neuron.GetBias());
+                for (double weight : neuron.GetWeights())
+                    stringBuilder.append(",").append(weight);
+                stringBuilder.append("\n");
+            }
+        }
+
+        // append outputLayer weights and biases to output string
+        for (Neuron neuron : outputLayer)
+        {
+            stringBuilder.append(neuron.GetBias());
+            for (double weight : neuron.GetWeights())
+                stringBuilder.append(",").append(weight);
+            stringBuilder.append("\n");
+        }
+
+        try
+        {
+            // create BufferedWriter to output created string to file
+            String filePath = System.getProperty("user.home") + "\\Documents\\NetworkState " + DateTimeFormatter.ofPattern("yyyy.MM.dd-HH.mm.ss").format(LocalDateTime.now()) + ".dat";
+            File outputFile = new File(filePath);
+            BufferedWriter fileOut = new BufferedWriter(new FileWriter(outputFile));
+            fileOut.write(stringBuilder.toString());
+
+            // close BufferedWriter
+            fileOut.close();
+
+            return true;
+        }
+        catch (IOException e)
+        {
+            System.out.println("There was an error during file write");
+            return false;
+        }
     }
 
     // runs training algorithms on networks using the given training set,
