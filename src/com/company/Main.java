@@ -146,8 +146,8 @@ public class Main
                     break;
 
                 case "2":
-                    // TODO: Get network file from stdin
-                    String networkFile = "";
+                    System.out.print("Enter file path of input file: ");
+                    String networkFile = kbInput.nextLine();
                     if (mnistNetwork.LoadNetwork(networkFile))
                     {
                         System.out.println("Network Loading Completed\nPress Enter to Continue\n");
