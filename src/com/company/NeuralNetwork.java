@@ -13,6 +13,9 @@ public class NeuralNetwork
     private final Neuron[][] midLayers;
     private final Neuron[] outputLayer;
 
+    // maintains number of correctly answered tests in each epoch
+    private int[] epochAnswers, epochCorrectAnswers;
+
     // constructor takes all size constraints of network, creates neuron arrays
     // based on constraints, and initializes the neurons in the arrays
     public NeuralNetwork(int numInputs, int numMidLayers, int numMidLayerNodes, int numOutputLayerNodes)
@@ -196,9 +199,17 @@ public class NeuralNetwork
     // learning rate, mini-batch size, and number of epochs
     public void TrainNetwork(NetworkInput[] trainingData, double learnRate, int batchSize, int numEpochs)
     {
+        int totalCorrect;
+
         // loop through set number of epochs
         for (int i = 0; i < numEpochs; i++)
         {
+            // reset epoch arrays
+            epochAnswers = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            epochCorrectAnswers = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+            // reset total correct
+            totalCorrect = 0;
 
             // shuffle training data
             Collections.shuffle(Arrays.asList(trainingData));
@@ -216,7 +227,17 @@ public class NeuralNetwork
                 RunMiniBatch(miniBatch, learnRate);
             }
 
+            // print epoch statistics
             System.out.println("Finished epoch " + (i + 1));
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int j = 0; j < epochAnswers.length; j++)
+            {
+                stringBuilder.append(String.format("%d = %d/%d\t", j, epochAnswers[j], epochCorrectAnswers[j]));
+                if (j == 5) stringBuilder.append("\n");
+                totalCorrect += epochAnswers[j];
+            }
+            stringBuilder.append(String.format("Accuracy = %d/%d = %f", totalCorrect, Main.TRAINING_DATA_SIZE, (((double)totalCorrect / (double)Main.TRAINING_DATA_SIZE) * 100)));
+            System.out.println(stringBuilder.toString());
         }
     }
 
@@ -227,7 +248,12 @@ public class NeuralNetwork
         // run and calculate gradient for each case in mini batch
         for (NetworkInput networkInput : miniBatch)
         {
-            RunNetwork(networkInput.inputValues);
+            // increment index answered by network if network guessed correctly
+            if (RunNetwork(networkInput.inputValues) == networkInput.correctOutput)
+                epochAnswers[networkInput.correctOutput]++;
+            // increment correct answer
+            epochCorrectAnswers[networkInput.correctOutput]++;
+            // run back propagation
             BackPropagate(networkInput.correctOutputVector);
         }
 
