@@ -42,7 +42,8 @@ public class NeuralNetwork
 
     // loads network from text file at provided file path
     // If network parameters at beginning of file do not match network
-    // parameters are trying to be loaded onto, halts loading operation and prints error message
+    // parameters they are trying to be loaded onto, halts loading operation
+    // and prints error message
     public boolean LoadNetwork(String filePath)
     {
         // get network parameters
@@ -71,7 +72,7 @@ public class NeuralNetwork
             }
 
             // read in bias and weight values for hidden layers
-            String[] splitLine; // stores comma seperated tokens from line
+            String[] splitLine; // stores comma separated tokens from line
             for (Neuron[] layer : midLayers)
             {
                 for (Neuron neuron : layer)
@@ -171,7 +172,8 @@ public class NeuralNetwork
         }
     }
 
-    // runs mini-batch, running back propagation algorithm on each input in batch
+    // runs mini-batch, running feed forward and back propagation algorithm on
+    // each input in batch, then applying gradients to all neurons after finishing batch
     private void RunMiniBatch(NetworkInput[] miniBatch, double learnRate)
     {
         // run and calculate gradient for each case in mini batch
@@ -194,7 +196,9 @@ public class NeuralNetwork
             neuron.ApplyGradients(learnRate, miniBatch.length);
     }
 
-    // runs back propagation algorithm for current training case
+    // runs back propagation algorithm for current training case,
+    // correctOutputVector is array of size 10 with all values 0
+    // except for index of correct answer, the value of which is 1
     private void BackPropagate(int[] correctOutputVector)
     {
         // compute bias gradient for output layer
