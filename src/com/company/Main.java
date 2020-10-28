@@ -14,6 +14,7 @@ package com.company;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.lang.StringBuilder;
 
 public class Main
 {
@@ -110,7 +111,7 @@ public class Main
         // create string for reading input
         String uInput;
         // boolean array for storing the correct outputs of network test
-        boolean[] correctOutputs;
+        boolean[] correctOutputs = null;
         // int for storing the number of correctly guessed cases in network test
         int numCorrect;
         // boolean for tracking if network has been trained or loaded yet
@@ -121,7 +122,7 @@ public class Main
         while (continueFlag)
         {
             // print menu dialogue
-            System.out.println("Main Menu\n(1) Train Network\n(2) Load Network State From File\n(3) Test Network on Training Data\n(4) Test Network on Testing Data\n(5) Save Network State To File\n(0) Exit\n");
+            System.out.println("Main Menu\n(1) Train Network\n(2) Load Network State From File\n(3) Test Network on Training Data\n(4) Test Network on Testing Data\n(5) Save Network State To File\n(6) Display Misclassified Cases\n(0) Exit\n");
             System.out.print("Please select the number of a menu item: ");
 
             // grab user input from stdin
@@ -205,6 +206,41 @@ public class Main
                     kbInput.nextLine();
                     break;
 
+                case "6":
+                    // check if network has been tested at least once already
+                    if (correctOutputs != null)
+                    {
+                        if (correctOutputs.length == TRAINING_DATA_SIZE)
+                        {
+                            for (int i = 0; i < correctOutputs.length; i++)
+                            {
+                                if (!correctOutputs[i])
+                                {
+                                    System.out.printf("Training Case #%d: Correct Classification = %d Network Output", i, trainingData[i].correctOutput);
+                                    DisplayDigit(trainingData[i].inputValues);
+                                    if (kbInput.nextLine().equals("-1"))
+                                        break;
+                                }
+                            }
+                        }
+                        else if (correctOutputs.length == TESTING_DATA_SIZE)
+                        {
+                            for (int i = 0; i < correctOutputs.length; i++)
+                            {
+                                if (!correctOutputs[i])
+                                    DisplayDigit(testingData[i].inputValues);
+                                if (kbInput.nextLine().equals("-1"))
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                        System.out.println("Network must have been tested at least once to display misclassified outputs");
+
+                    System.out.println("Press Enter to Continue\n");
+                    kbInput.nextLine();
+                    break;
+
                 case "0":
                     continueFlag = false;
                     break;
@@ -217,5 +253,50 @@ public class Main
             }
         }
         // endregion
+    }
+
+    private static void DisplayDigit(double[] digit)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        int index = 0;
+        double value;
+
+        // loop through whole image
+        for (int i = 0; i < 28; i++)
+        {
+            for (int j = 0; j < 28; j++)
+            {
+                value = digit[index] * 255;
+
+                // append character
+                if (value < 26)
+                    stringBuilder.append("  ");
+                else if (value < 51)
+                    stringBuilder.append(". ");
+                else if (value < 76)
+                    stringBuilder.append(": ");
+                else if (value < 101)
+                    stringBuilder.append("- ");
+                else if (value < 126)
+                    stringBuilder.append("= ");
+                else if (value < 151)
+                    stringBuilder.append("+ ");
+                else if (value < 176)
+                    stringBuilder.append("* ");
+                else if (value < 201)
+                    stringBuilder.append("# ");
+                else if (value < 226)
+                    stringBuilder.append("% ");
+                else
+                    stringBuilder.append("@ ");
+
+                // increment index
+                index++;
+            }
+            stringBuilder.append("\n");
+        }
+
+        // print built string
+        System.out.println(stringBuilder.toString());
     }
 }
